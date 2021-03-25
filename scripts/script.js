@@ -6,36 +6,25 @@ const bookRead = document.querySelectorAll(".form-check-input");
 const displayBooks = document.querySelector(".display-book");
 var myLibrary = []
 
-function Book(title, author, pages, read = "notread"){
+function Book(title, author, pages, read = "not read"){
     this.title = title;
     this.author = author;
     this.pages = pages;
     this.read = read;
-    this.info = function (){
+    /*this.info = function (){
         return title + " by " + author + ", " + pages + " pages, " + read;
-    };   
+    };*/   
 };
-
 
 function addBookToLibrary(book){
     myLibrary.push(book);
     resetDisplay();
-   // console.log(myLibrary.length);
     getAllBooks();
-    //addToList(book);
 };
-
-book2 = new Book("TiTRE","Auteur","2230","read");
-addBookToLibrary(book2);
-book1 = new Book("TiTRE","Auteur","pages");
-addBookToLibrary(book1);
-book4 = new Book("Tefsjeiof","Auteesfssefur","43", "read");
-addBookToLibrary(book4);
 
 function resetDisplay(){
     displayBooks.innerHTML = ""
 };
-
 
 btnSubmit.addEventListener('click', e=> {
     const newTitle = document.getElementById("title").value
@@ -50,64 +39,65 @@ btnSubmit.addEventListener('click', e=> {
 
 function getAllBooks(){
     myLibrary.forEach((element,index) => {
-        //console.log("element + index " + element + index)
-        var trr = document.createElement("tr");
-        displayBooks.appendChild(trr);
-        var td_elt = document.createElement("td");
-        td_elt.innerHTML = element.title;
-        trr.appendChild(td_elt);
-        var td_elt2 = document.createElement("td");
-        td_elt2.innerHTML = element.author;
-        trr.appendChild(td_elt2);
-        var td_elt3 = document.createElement("td"); 
-        td_elt3.innerHTML = element.pages;
-        trr.appendChild(td_elt3);
-
-        var td_elt4 = document.createElement("td");
-        readButton = document.createElement("button");
+        var tableRow = document.createElement("tr");
         
-        readButton.innerHTML = element.read;
-        test = readButton.innerHTML
-        td_elt4.appendChild(readButton);
+        displayBooks.appendChild(tableRow);
+        var titleColonmn = document.createElement("td");
+        titleColonmn.classList.add('colomn-table');
+        titleColonmn.innerHTML = element.title;
+        tableRow.appendChild(titleColonmn);
+        var authorColomn = document.createElement("td");
+        authorColomn.classList.add('colomn-table');
+        authorColomn.innerHTML = element.author;
+        tableRow.appendChild(authorColomn);
+        var pagesColomn = document.createElement("td"); 
+        pagesColomn.classList.add('colomn-table');
+        pagesColomn.innerHTML = element.pages;
+        tableRow.appendChild(pagesColomn);
 
-        readButton.addEventListener('click', e=>{
-            console.log("index = " + index);
-            console.log("element = " + element.read);
-         
-            
-            if(element.read == "notread"){
+        var readColomn = document.createElement("td");
+        readColomn.classList.add('colomn-table');
+        readButton = document.createElement("button");
+        readButton.classList.add('btn-row');
+        readButton.setAttribute("id", "readorNot")
+
+        if(element.read === "not read"){
+            readButton.innerHTML = "\u2718";
+        }else{
+            readButton.innerHTML = "\u2714";
+            readButton.setAttribute("background-color", "green");
+        }
+
+        readButton.addEventListener('click', e=>{ 
+           if(element.read === "not read"){
+                readButton.innerHTML = "\u2714";
                 element.read = "read";
-                readButton.innerHTML = element.read;
-
             }else{
-                element.read = "notread"
-                //readButton.style.visibility = "hidden"
-                readButton.innerHTML = element.read;
-              //  
+                element.read = "not read"
+                readButton.innerHTML =  "\u2718";
             }
-            console.log("element = " + element.read);
-         
             resetDisplay();
             getAllBooks();
-            
-                
-        })
-        trr.appendChild(td_elt4);
+        });
 
-        var td_elt5 = document.createElement("td"); 
+        readColomn.appendChild(readButton);
+        tableRow.appendChild(readColomn);
+
+        var deleteColomn = document.createElement("td"); 
+        deleteColomn.classList.add('colomn-table');
         deleteButton = document.createElement("button");
+        deleteButton.classList.add('btn-row');
+        deleteButton.setAttribute("id", "delete")
         deleteButton.innerHTML = "DELETE"
-        td_elt5.appendChild(deleteButton);
+        deleteColomn.appendChild(deleteButton);
         deleteButton.addEventListener('click', e=>{
             myLibrary.splice(index, 1);
             resetDisplay();
             getAllBooks();
         })
-       trr.appendChild(td_elt5);
+        tableRow.appendChild(deleteColomn);
     });
 };
-
-
 
 /*-------------------------*/
 /*
